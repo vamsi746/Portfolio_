@@ -31,33 +31,34 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-        isScrolled ? "bg-black/20 backdrop-blur-md" : "bg-transparent"
+        isScrolled ? "bg-black/80 backdrop-blur-md border-b border-gray-800" : "bg-transparent"
       }`}
     >
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex h-16 items-center justify-between px-6 py-2">
+        {/* Logo/Brand */}
         <Link href="#home" className="flex items-center space-x-2">
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
             className="font-bold text-xl text-white"
           >
-            Portfolio
+            <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Portfolio</span>
           </motion.div>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
+        <nav className="hidden lg:flex items-center space-x-1">
           {navItems.map((item, index) => (
             <motion.div
               key={item.name}
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ delay: index * 0.1, duration: 0.4 }}
             >
               <Link
                 href={item.href}
-                className="text-white/80 hover:text-white transition-colors px-4 py-2 rounded-full hover:bg-white/10"
+                className="text-gray-300 hover:text-white transition-colors px-4 py-2 rounded-full hover:bg-gray-800/50 font-medium"
               >
                 {item.name}
               </Link>
@@ -66,14 +67,14 @@ export default function Header() {
         </nav>
 
         {/* Mobile Menu Button */}
-        <div className="flex md:hidden">
+        <div className="flex lg:hidden">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-white hover:bg-white/10"
+            className="text-white hover:bg-gray-800/50 rounded-full"
           >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
         </div>
 
@@ -85,14 +86,14 @@ export default function Header() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-x-0 top-16 bg-black/90 backdrop-blur-sm md:hidden z-50"
+              className="fixed inset-x-0 top-16 bg-black/95 backdrop-blur-md lg:hidden z-50 border-b border-gray-800"
             >
-              <div className="container py-4 flex flex-col space-y-4">
+              <div className="container py-6 flex flex-col space-y-4 px-6">
                 {navItems.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="text-white/80 hover:text-white transition-colors py-2"
+                    className="text-gray-300 hover:text-white transition-colors py-3 px-4 rounded-lg hover:bg-gray-800/50 font-medium"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.name}

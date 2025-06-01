@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -186,228 +186,218 @@ export default function Certifications() {
   }
 
   return (
-    <section id="certifications" className="py-16 md:py-24 bg-gray-900/50">
-      <div className="container max-w-4xl">
+    <section id="certifications" className="py-24 md:py-32 relative overflow-hidden section-light-grayscale">
+      <div className="container max-w-7xl relative z-10 px-6">
+        {/* Section Header */}
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col items-center mb-12"
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center mb-20"
         >
-          <h2 className="text-3xl font-bold mb-2 text-white">Certifications</h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-gray-400 to-gray-600 rounded-full mb-6"></div>
+          <h2 className="section-title-light-grayscale text-5xl md:text-6xl font-black text-gray-900 mb-6">
+            Certifications
+          </h2>
+          <div className="w-24 h-1 bg-gradient-to-r from-gray-400 via-gray-600 to-gray-400 mx-auto mb-6"></div>
+          <p className="text-gray-600 text-xl max-w-3xl mx-auto leading-relaxed">
+            Professional certifications and achievements
+          </p>
         </motion.div>
 
-        <div className="space-y-6">
-          {/* Add New Certificate Button */}
+        {/* Add Certificate Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex justify-center mb-12"
+        >
+          <Button
+            onClick={() =>
+              requireAuth(() => {
+                setIsAdding(true)
+                setEditingId(null)
+              })
+            }
+            className="btn-light-grayscale text-lg px-8 py-4"
+          >
+            <Plus className="mr-2 h-5 w-5" /> Add Certificate
+          </Button>
+        </motion.div>
+
+        {/* Add/Edit Certificate Form */}
+        {isAdding && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex justify-center"
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="mb-12"
           >
-            <Button
-              onClick={() =>
-                requireAuth(() => {
-                  setIsAdding(true)
-                  setEditingId(null)
-                })
-              }
-              className="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 transition-all duration-300"
-            >
-              <Plus className="mr-2 h-4 w-4" /> Add Certificate
-            </Button>
-          </motion.div>
-
-          {/* Add/Edit Certificate Form */}
-          {isAdding && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mb-6"
-            >
-              <Card className="bg-gray-800/50 backdrop-blur-md border-gray-700 text-white">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Award className="mr-2 h-5 w-5" />
-                    {editingId ? "Edit Certificate" : "Add New Certificate"}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <Input
-                      placeholder="Certificate Title"
-                      value={newCertificate.title}
-                      onChange={(e) => setNewCertificate({ ...newCertificate, title: e.target.value })}
-                      className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
-                    />
-                    <Input
-                      placeholder="Issuing Organization"
-                      value={newCertificate.issuer}
-                      onChange={(e) => setNewCertificate({ ...newCertificate, issuer: e.target.value })}
-                      className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
-                    />
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <Input
-                      placeholder="Date (e.g., 2024)"
-                      value={newCertificate.date}
-                      onChange={(e) => setNewCertificate({ ...newCertificate, date: e.target.value })}
-                      className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
-                    />
-                    <Input
-                      placeholder="Credential URL (optional)"
-                      value={newCertificate.credentialUrl}
-                      onChange={(e) => setNewCertificate({ ...newCertificate, credentialUrl: e.target.value })}
-                      className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
-                    />
-                  </div>
+            <div className="grayscale-card-light max-w-4xl mx-auto p-8">
+              <CardHeader className="p-0 mb-8">
+                <CardTitle className="text-2xl font-bold text-gray-900 flex items-center">
+                  <Award className="mr-3 h-7 w-7 text-gray-600" />
+                  {editingId ? "Edit Certificate" : "Add New Certificate"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0 space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
                   <Input
-                    placeholder="Certificate File URL (optional)"
-                    value={newCertificate.certificateUrl}
-                    onChange={(e) => setNewCertificate({ ...newCertificate, certificateUrl: e.target.value })}
-                    className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
+                    placeholder="Certificate Title"
+                    value={newCertificate.title}
+                    onChange={(e) => setNewCertificate({ ...newCertificate, title: e.target.value })}
+                    className="input-light-grayscale"
                   />
-                  <Textarea
-                    placeholder="Description"
-                    value={newCertificate.description}
-                    onChange={(e) => setNewCertificate({ ...newCertificate, description: e.target.value })}
-                    className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
-                    rows={3}
+                  <Input
+                    placeholder="Issuing Organization"
+                    value={newCertificate.issuer}
+                    onChange={(e) => setNewCertificate({ ...newCertificate, issuer: e.target.value })}
+                    className="input-light-grayscale"
                   />
+                </div>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Input
+                    placeholder="Date (e.g., 2024)"
+                    value={newCertificate.date}
+                    onChange={(e) => setNewCertificate({ ...newCertificate, date: e.target.value })}
+                    className="input-light-grayscale"
+                  />
+                  <Input
+                    placeholder="Credential URL (optional)"
+                    value={newCertificate.credentialUrl}
+                    onChange={(e) => setNewCertificate({ ...newCertificate, credentialUrl: e.target.value })}
+                    className="input-light-grayscale"
+                  />
+                </div>
+                <Input
+                  placeholder="Certificate File URL (optional)"
+                  value={newCertificate.certificateUrl}
+                  onChange={(e) => setNewCertificate({ ...newCertificate, certificateUrl: e.target.value })}
+                  className="input-light-grayscale"
+                />
+                <Textarea
+                  placeholder="Description"
+                  value={newCertificate.description}
+                  onChange={(e) => setNewCertificate({ ...newCertificate, description: e.target.value })}
+                  className="input-light-grayscale"
+                  rows={3}
+                />
+                <div className="flex space-x-4">
+                  <Button
+                    onClick={editingId ? handleUpdateCertificate : handleAddCertificate}
+                    className="btn-light-grayscale"
+                  >
+                    <Save className="mr-2 h-4 w-4" /> {editingId ? "Update Certificate" : "Save Certificate"}
+                  </Button>
+                  <Button onClick={handleCancel} className="btn-outline-grayscale">
+                    <X className="mr-2 h-4 w-4" /> Cancel
+                  </Button>
+                </div>
+              </CardContent>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Certificates List */}
+        <div className="space-y-8">
+          {certificates.map((certificate, index) => (
+            <motion.div
+              key={certificate.id}
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="float-grayscale"
+            >
+              <div className="grayscale-card-light max-w-4xl mx-auto p-8">
+                <CardHeader className="flex flex-row items-start justify-between p-0 mb-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-gray-600 p-3 rounded-xl">
+                      <Award className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl text-gray-900 font-bold">{certificate.title}</CardTitle>
+                      <p className="text-gray-600 font-semibold">
+                        {certificate.issuer} • {certificate.date}
+                      </p>
+                    </div>
+                  </div>
                   <div className="flex space-x-2">
                     <Button
-                      onClick={editingId ? handleUpdateCertificate : handleAddCertificate}
-                      className="bg-green-600 hover:bg-green-700 transition-all duration-300"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => requireAuth(() => handleEditCertificate(certificate.id))}
+                      className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full"
                     >
-                      <Save className="mr-2 h-4 w-4" /> {editingId ? "Update Certificate" : "Save Certificate"}
+                      <Edit className="h-4 w-4" />
                     </Button>
-                    <Button
-                      onClick={handleCancel}
-                      variant="outline"
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700 transition-all duration-300"
-                    >
-                      <X className="mr-2 h-4 w-4" /> Cancel
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
-
-          {/* Certificates List */}
-          <div className="space-y-4">
-            {certificates.map((certificate, index) => (
-              <motion.div
-                key={certificate.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.8, delay: 0.1 * index }}
-                whileHover={{ scale: 1.01 }}
-                className="transition-all duration-300"
-              >
-                <Card className="bg-gray-800/50 backdrop-blur-md border-gray-700 text-white hover:bg-gray-700/50 transition-all duration-300">
-                  <CardHeader className="flex flex-row items-start justify-between pb-2">
-                    <div className="flex items-center space-x-3">
-                      <div className="bg-gradient-to-r from-gray-600 to-gray-700 p-2 rounded-full">
-                        <Award className="h-5 w-5 text-white" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg">{certificate.title}</CardTitle>
-                        <p className="text-gray-400 text-sm">
-                          {certificate.issuer} • {certificate.date}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex space-x-1">
+                    {certificate.credentialUrl && (
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => requireAuth(() => handleEditCertificate(certificate.id))}
-                        className="text-gray-400 hover:text-white hover:bg-gray-700 hover:scale-110 transition-all duration-300"
+                        className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full"
+                        asChild
                       >
-                        <Edit className="h-4 w-4" />
+                        <Link href={certificate.credentialUrl} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="h-4 w-4" />
+                        </Link>
                       </Button>
+                    )}
+                    {certificate.certificateUrl && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full"
+                        asChild
+                      >
+                        <Link href={certificate.certificateUrl} target="_blank" rel="noopener noreferrer">
+                          <Eye className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => requireAuth(() => handleDeleteCertificate(certificate.id))}
+                      className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-0 space-y-4">
+                  <p className="text-gray-700 leading-relaxed font-medium">{certificate.description}</p>
+                  {(certificate.credentialUrl || certificate.certificateUrl) && (
+                    <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-200">
                       {certificate.credentialUrl && (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-gray-400 hover:text-white hover:bg-gray-700 hover:scale-110 transition-all duration-300"
-                          asChild
-                        >
+                        <Button className="btn-outline-grayscale" asChild>
                           <Link href={certificate.credentialUrl} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="h-4 w-4" />
+                            <ExternalLink className="mr-2 h-3 w-3" /> Verify Credential
                           </Link>
                         </Button>
                       )}
                       {certificate.certificateUrl && (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-gray-400 hover:text-white hover:bg-gray-700 hover:scale-110 transition-all duration-300"
-                          asChild
-                        >
+                        <Button className="btn-outline-grayscale" asChild>
                           <Link href={certificate.certificateUrl} target="_blank" rel="noopener noreferrer">
-                            <Eye className="h-4 w-4" />
+                            <Eye className="mr-2 h-3 w-3" /> View Certificate
                           </Link>
                         </Button>
                       )}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => requireAuth(() => handleDeleteCertificate(certificate.id))}
-                        className="text-red-400 hover:bg-red-500/20 hover:scale-110 transition-all duration-300"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
                     </div>
-                  </CardHeader>
-                  <CardContent className="pt-0 space-y-4">
-                    <p className="text-gray-300">{certificate.description}</p>
-                    {(certificate.credentialUrl || certificate.certificateUrl) && (
-                      <div className="flex flex-wrap gap-2">
-                        {certificate.credentialUrl && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                            asChild
-                          >
-                            <Link href={certificate.credentialUrl} target="_blank" rel="noopener noreferrer">
-                              <ExternalLink className="mr-2 h-3 w-3" /> Verify
-                            </Link>
-                          </Button>
-                        )}
-                        {certificate.certificateUrl && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                            asChild
-                          >
-                            <Link href={certificate.certificateUrl} target="_blank" rel="noopener noreferrer">
-                              <Eye className="mr-2 h-3 w-3" /> View Certificate
-                            </Link>
-                          </Button>
-                        )}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-
-          {certificates.length === 0 && !isAdding && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
-              <Award className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-              <p className="text-gray-400 text-lg">No certificates added yet</p>
-              <p className="text-gray-500">Click "Add Certificate" to showcase your achievements</p>
+                  )}
+                </CardContent>
+              </div>
             </motion.div>
-          )}
+          ))}
         </div>
+
+        {/* Empty State */}
+        {certificates.length === 0 && !isAdding && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
+            <Award className="h-20 w-20 text-gray-600 mx-auto mb-6" />
+            <p className="text-gray-500 text-xl mb-2">No certificates added yet</p>
+            <p className="text-gray-400">Click "Add Certificate" to showcase your achievements</p>
+          </motion.div>
+        )}
 
         <AuthModal
           isOpen={showAuthModal}

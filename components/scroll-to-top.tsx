@@ -37,7 +37,12 @@ export default function ScrollToTop() {
           exit={{ opacity: 0, scale: 0.5 }}
           className="fixed bottom-8 right-8 z-50"
         >
-          <Button onClick={scrollToTop} size="icon" className="rounded-full shadow-lg" aria-label="Scroll to top">
+          <Button
+            onClick={scrollToTop}
+            size="icon"
+            className="rounded-full shadow-lg bg-gray-800 hover:bg-gray-700 text-white"
+            aria-label="Scroll to top"
+          >
             <ArrowUp className="h-5 w-5" />
           </Button>
         </motion.div>

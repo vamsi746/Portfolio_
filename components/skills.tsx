@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -165,220 +165,182 @@ export default function Skills() {
   }
 
   return (
-    <section id="skills" className="py-16 md:py-24 bg-black/20">
-      <div className="container max-w-4xl">
+    <section id="skills" className="py-24 md:py-32 relative overflow-hidden section-light-grayscale">
+      <div className="container max-w-7xl relative z-10 px-6">
+        {/* Section Header */}
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col items-center mb-12"
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center mb-20"
         >
-          <h2 className="text-3xl font-bold mb-2 text-white">Skills</h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-gray-400 to-gray-600 rounded-full mb-6"></div>
+          <h2 className="section-title-light-grayscale text-5xl md:text-6xl font-black text-gray-900 mb-6">Skills</h2>
+          <div className="w-24 h-1 bg-gradient-to-r from-gray-400 via-gray-600 to-gray-400 mx-auto mb-6"></div>
+          <p className="text-gray-600 text-xl max-w-3xl mx-auto leading-relaxed">
+            Technical expertise and professional competencies
+          </p>
         </motion.div>
 
-        <div className="space-y-6">
-          {/* Add New Category Button */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex justify-center"
+        {/* Add Category Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex justify-center mb-12"
+        >
+          <Button
+            onClick={() => requireAuth(() => setIsAddingCategory(true))}
+            className="btn-light-grayscale text-lg px-8 py-4"
           >
-            <Button
-              onClick={() => requireAuth(() => setIsAddingCategory(true))}
-              className="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 transition-all duration-300"
-            >
-              <Plus className="mr-2 h-4 w-4" /> Add Skill Category
-            </Button>
-          </motion.div>
+            <Plus className="mr-2 h-5 w-5" /> Add Skill Category
+          </Button>
+        </motion.div>
 
-          {/* Add New Category Form */}
-          {isAddingCategory && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mb-6"
-            >
-              <Card className="bg-gray-800/50 backdrop-blur-md border-gray-700 text-white">
-                <CardContent className="pt-6 space-y-4">
-                  <Input
-                    placeholder="Category Name (e.g., Programming Languages)"
-                    value={newCategory}
-                    onChange={(e) => setNewCategory(e.target.value)}
-                    className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
-                  />
-                  <div className="flex space-x-2">
-                    <Button
-                      onClick={handleAddCategory}
-                      className="bg-green-600 hover:bg-green-700 transition-all duration-300"
-                    >
-                      <Save className="mr-2 h-4 w-4" /> Save Category
-                    </Button>
-                    <Button
-                      onClick={() => setIsAddingCategory(false)}
-                      variant="outline"
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700 transition-all duration-300"
-                    >
-                      <X className="mr-2 h-4 w-4" /> Cancel
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
-
-          {/* Add New Skill Form */}
-          {isAddingSkill && selectedCategoryId && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mb-6"
-            >
-              <Card className="bg-gray-800/50 backdrop-blur-md border-gray-700 text-white">
-                <CardContent className="pt-6 space-y-4">
-                  <Input
-                    placeholder="Skill Name (e.g., Python)"
-                    value={newSkill}
-                    onChange={(e) => setNewSkill(e.target.value)}
-                    className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
-                  />
-                  <div className="flex space-x-2">
-                    <Button
-                      onClick={handleAddSkill}
-                      className="bg-green-600 hover:bg-green-700 transition-all duration-300"
-                    >
-                      <Save className="mr-2 h-4 w-4" /> Add Skill
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setIsAddingSkill(false)
-                        setSelectedCategoryId(null)
-                      }}
-                      variant="outline"
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700 transition-all duration-300"
-                    >
-                      <X className="mr-2 h-4 w-4" /> Cancel
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
-
-          {/* Edit Category Form */}
-          {editingCategoryId && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mb-6"
-            >
-              <Card className="bg-gray-800/50 backdrop-blur-md border-gray-700 text-white">
-                <CardContent className="pt-6 space-y-4">
-                  <Input
-                    placeholder="Category Name"
-                    value={editCategoryName}
-                    onChange={(e) => setEditCategoryName(e.target.value)}
-                    className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
-                  />
-                  <div className="flex space-x-2">
-                    <Button
-                      onClick={handleUpdateCategory}
-                      className="bg-green-600 hover:bg-green-700 transition-all duration-300"
-                    >
-                      <Save className="mr-2 h-4 w-4" /> Update Category
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setEditingCategoryId(null)
-                        setEditCategoryName("")
-                      }}
-                      variant="outline"
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700 transition-all duration-300"
-                    >
-                      <X className="mr-2 h-4 w-4" /> Cancel
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
-
-          {/* Skills Categories */}
-          <div className="space-y-6">
-            {categories.map((category, index) => (
-              <motion.div
-                key={category.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.8, delay: 0.1 * index }}
-                whileHover={{ scale: 1.01 }}
-                className="transition-all duration-300"
-              >
-                <Card className="bg-gray-800/50 backdrop-blur-md border-gray-700 text-white hover:bg-gray-700/50 transition-all duration-300">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-lg">{category.name}</CardTitle>
-                    <div className="flex space-x-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => requireAuth(() => handleEditCategory(category.id))}
-                        className="text-gray-400 hover:text-white hover:bg-gray-700 hover:scale-110 transition-all duration-300"
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() =>
-                          requireAuth(() => {
-                            setSelectedCategoryId(category.id)
-                            setIsAddingSkill(true)
-                          })
-                        }
-                        className="text-gray-400 hover:text-white hover:bg-gray-700 hover:scale-110 transition-all duration-300"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => requireAuth(() => handleDeleteCategory(category.id))}
-                        className="text-red-400 hover:bg-red-500/20 hover:scale-110 transition-all duration-300"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="flex flex-wrap gap-2">
-                      {category.skills.map((skill) => (
-                        <Badge
-                          key={skill}
-                          className="bg-gray-700 hover:bg-gray-600 text-gray-200 group flex items-center gap-1 pl-3 transition-all"
-                        >
-                          {skill}
-                          <button
-                            onClick={() => requireAuth(() => handleDeleteSkill(category.id, skill))}
-                            className="ml-1 rounded-full hover:bg-gray-600 p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        </Badge>
-                      ))}
-                      {category.skills.length === 0 && (
-                        <p className="text-gray-500 text-sm italic">No skills added yet</p>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+        {/* Add New Category Form */}
+        {isAddingCategory && (
+          <div className="grayscale-card-light max-w-2xl mx-auto p-6 mb-8">
+            <CardContent className="pt-6 space-y-4">
+              <Input
+                placeholder="Category Name (e.g., Programming Languages)"
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+                className="input-light-grayscale"
+              />
+              <div className="flex space-x-2">
+                <Button onClick={handleAddCategory} className="btn-light-grayscale">
+                  <Save className="mr-2 h-4 w-4" /> Save Category
+                </Button>
+                <Button onClick={() => setIsAddingCategory(false)} className="btn-outline-grayscale">
+                  <X className="mr-2 h-4 w-4" /> Cancel
+                </Button>
+              </div>
+            </CardContent>
           </div>
+        )}
+
+        {/* Add New Skill Form */}
+        {isAddingSkill && selectedCategoryId && (
+          <div className="grayscale-card-light max-w-2xl mx-auto p-6 mb-8">
+            <CardContent className="pt-6 space-y-4">
+              <Input
+                placeholder="Skill Name (e.g., Python)"
+                value={newSkill}
+                onChange={(e) => setNewSkill(e.target.value)}
+                className="input-light-grayscale"
+              />
+              <div className="flex space-x-2">
+                <Button onClick={handleAddSkill} className="btn-light-grayscale">
+                  <Save className="mr-2 h-4 w-4" /> Add Skill
+                </Button>
+                <Button
+                  onClick={() => {
+                    setIsAddingSkill(false)
+                    setSelectedCategoryId(null)
+                  }}
+                  className="btn-outline-grayscale"
+                >
+                  <X className="mr-2 h-4 w-4" /> Cancel
+                </Button>
+              </div>
+            </CardContent>
+          </div>
+        )}
+
+        {/* Edit Category Form */}
+        {editingCategoryId && (
+          <div className="grayscale-card-light max-w-2xl mx-auto p-6 mb-8">
+            <CardContent className="pt-6 space-y-4">
+              <Input
+                placeholder="Category Name"
+                value={editCategoryName}
+                onChange={(e) => setEditCategoryName(e.target.value)}
+                className="input-light-grayscale"
+              />
+              <div className="flex space-x-2">
+                <Button onClick={handleUpdateCategory} className="btn-light-grayscale">
+                  <Save className="mr-2 h-4 w-4" /> Update Category
+                </Button>
+                <Button
+                  onClick={() => {
+                    setEditingCategoryId(null)
+                    setEditCategoryName("")
+                  }}
+                  className="btn-outline-grayscale"
+                >
+                  <X className="mr-2 h-4 w-4" /> Cancel
+                </Button>
+              </div>
+            </CardContent>
+          </div>
+        )}
+
+        {/* Skills Categories */}
+        <div className="space-y-8">
+          {categories.map((category, index) => (
+            <motion.div
+              key={category.id}
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="float-grayscale"
+            >
+              <div className="grayscale-card-light p-8">
+                <CardHeader className="flex flex-row items-center justify-between p-0 mb-6">
+                  <CardTitle className="text-2xl text-gray-900 font-bold">{category.name}</CardTitle>
+                  <div className="flex space-x-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => requireAuth(() => handleEditCategory(category.id))}
+                      className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() =>
+                        requireAuth(() => {
+                          setSelectedCategoryId(category.id)
+                          setIsAddingSkill(true)
+                        })
+                      }
+                      className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => requireAuth(() => handleDeleteCategory(category.id))}
+                      className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="flex flex-wrap gap-3">
+                    {category.skills.map((skill) => (
+                      <Badge key={skill} className="badge-light-grayscale group flex items-center gap-2 px-4 py-2">
+                        {skill}
+                        <button
+                          onClick={() => requireAuth(() => handleDeleteSkill(category.id, skill))}
+                          className="ml-1 rounded-full hover:bg-gray-300 p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </Badge>
+                    ))}
+                    {category.skills.length === 0 && (
+                      <p className="text-gray-500 text-sm italic">No skills added yet</p>
+                    )}
+                  </div>
+                </CardContent>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
         <AuthModal

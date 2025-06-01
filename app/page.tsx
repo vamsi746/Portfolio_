@@ -6,12 +6,12 @@ import Certifications from "@/components/certifications"
 import Education from "@/components/education"
 import Activities from "@/components/activities"
 import Contact from "@/components/contact"
-import ParticleBackground from "@/components/particle-background"
+import Footer from "@/components/footer"
+import ScrollToTop from "@/components/scroll-to-top"
 
 export default function Home() {
   return (
     <main className="min-h-screen relative">
-      <ParticleBackground />
       <Hero />
       <About />
       <Education />
@@ -20,6 +20,8 @@ export default function Home() {
       <Certifications />
       <Activities />
       <Contact />
+      <Footer />
+      <ScrollToTop />
     </main>
   )
 }

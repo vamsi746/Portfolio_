@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -163,171 +163,168 @@ export default function Activities() {
   }
 
   return (
-    <section id="activities" className="py-16 md:py-24">
-      <div className="container max-w-4xl">
+    <section id="activities" className="py-24 md:py-32 relative overflow-hidden section-dark-grayscale">
+      <div className="container max-w-7xl relative z-10 px-6">
+        {/* Section Header */}
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col items-center mb-12"
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center mb-20"
         >
-          <h2 className="text-3xl font-bold mb-2 text-white">Extra-Curricular Activities</h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-gray-400 to-gray-600 rounded-full mb-6"></div>
+          <h2 className="section-title-grayscale text-5xl md:text-6xl font-black text-white mb-6">
+            Extra-Curricular Activities
+          </h2>
+          <div className="w-24 h-1 bg-gradient-to-r from-gray-400 via-gray-600 to-gray-400 mx-auto mb-6"></div>
+          <p className="text-gray-300 text-xl max-w-3xl mx-auto leading-relaxed">
+            Leadership, teamwork, and community involvement
+          </p>
         </motion.div>
 
-        <div className="space-y-6">
-          {/* Add New Activity Button */}
+        {/* Add Activity Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex justify-center mb-12"
+        >
+          <Button
+            onClick={() =>
+              requireAuth(() => {
+                setIsAdding(true)
+                setEditingId(null)
+              })
+            }
+            className="btn-grayscale text-lg px-8 py-4"
+          >
+            <Plus className="mr-2 h-5 w-5" /> Add Activity
+          </Button>
+        </motion.div>
+
+        {/* Add/Edit Activity Form */}
+        {isAdding && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex justify-center"
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="mb-12"
           >
-            <Button
-              onClick={() =>
-                requireAuth(() => {
-                  setIsAdding(true)
-                  setEditingId(null)
-                })
-              }
-              className="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 transition-all duration-300"
-            >
-              <Plus className="mr-2 h-4 w-4" /> Add Activity
-            </Button>
-          </motion.div>
-
-          {/* Add/Edit Activity Form */}
-          {isAdding && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mb-6"
-            >
-              <Card className="bg-gray-800/50 backdrop-blur-md border-gray-700 text-white">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Users className="mr-2 h-5 w-5" />
-                    {editingId ? "Edit Activity" : "Add New Activity"}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <Input
-                      placeholder="Activity/Club Title"
-                      value={newActivity.title}
-                      onChange={(e) => setNewActivity({ ...newActivity, title: e.target.value })}
-                      className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
-                    />
-                    <Input
-                      placeholder="Organization"
-                      value={newActivity.organization}
-                      onChange={(e) => setNewActivity({ ...newActivity, organization: e.target.value })}
-                      className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
-                    />
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <Input
-                      placeholder="Role/Position"
-                      value={newActivity.role}
-                      onChange={(e) => setNewActivity({ ...newActivity, role: e.target.value })}
-                      className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
-                    />
-                    <Input
-                      placeholder="Period (e.g., 2023 - Present)"
-                      value={newActivity.period}
-                      onChange={(e) => setNewActivity({ ...newActivity, period: e.target.value })}
-                      className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
-                    />
-                  </div>
-                  <Textarea
-                    placeholder="Description"
-                    value={newActivity.description}
-                    onChange={(e) => setNewActivity({ ...newActivity, description: e.target.value })}
-                    className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400"
-                    rows={3}
+            <div className="grayscale-card max-w-4xl mx-auto p-8">
+              <CardHeader className="p-0 mb-8">
+                <CardTitle className="text-2xl font-bold text-white flex items-center">
+                  <Users className="mr-3 h-7 w-7 text-gray-300" />
+                  {editingId ? "Edit Activity" : "Add New Activity"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0 space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Input
+                    placeholder="Activity/Club Title"
+                    value={newActivity.title}
+                    onChange={(e) => setNewActivity({ ...newActivity, title: e.target.value })}
+                    className="input-grayscale"
                   />
+                  <Input
+                    placeholder="Organization"
+                    value={newActivity.organization}
+                    onChange={(e) => setNewActivity({ ...newActivity, organization: e.target.value })}
+                    className="input-grayscale"
+                  />
+                </div>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Input
+                    placeholder="Role/Position"
+                    value={newActivity.role}
+                    onChange={(e) => setNewActivity({ ...newActivity, role: e.target.value })}
+                    className="input-grayscale"
+                  />
+                  <Input
+                    placeholder="Period (e.g., 2023 - Present)"
+                    value={newActivity.period}
+                    onChange={(e) => setNewActivity({ ...newActivity, period: e.target.value })}
+                    className="input-grayscale"
+                  />
+                </div>
+                <Textarea
+                  placeholder="Description"
+                  value={newActivity.description}
+                  onChange={(e) => setNewActivity({ ...newActivity, description: e.target.value })}
+                  className="input-grayscale"
+                  rows={3}
+                />
+                <div className="flex space-x-4">
+                  <Button onClick={editingId ? handleUpdateActivity : handleAddActivity} className="btn-grayscale">
+                    <Save className="mr-2 h-4 w-4" /> {editingId ? "Update Activity" : "Save Activity"}
+                  </Button>
+                  <Button onClick={handleCancel} className="btn-outline-grayscale">
+                    <X className="mr-2 h-4 w-4" /> Cancel
+                  </Button>
+                </div>
+              </CardContent>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Activities List */}
+        <div className="space-y-8">
+          {activities.map((activity, index) => (
+            <motion.div
+              key={activity.id}
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="float-grayscale"
+            >
+              <div className="grayscale-card max-w-4xl mx-auto p-8">
+                <CardHeader className="flex flex-row items-start justify-between p-0 mb-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-gray-600 p-3 rounded-xl">
+                      <Users className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl text-white font-bold">{activity.title}</CardTitle>
+                      <p className="text-gray-300 font-semibold">
+                        {activity.role} • {activity.period}
+                      </p>
+                      <p className="text-gray-400 text-sm">{activity.organization}</p>
+                    </div>
+                  </div>
                   <div className="flex space-x-2">
                     <Button
-                      onClick={editingId ? handleUpdateActivity : handleAddActivity}
-                      className="bg-green-600 hover:bg-green-700 transition-all duration-300"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => requireAuth(() => handleEditActivity(activity.id))}
+                      className="text-gray-300 hover:text-white hover:bg-gray-700 rounded-full"
                     >
-                      <Save className="mr-2 h-4 w-4" /> {editingId ? "Update Activity" : "Save Activity"}
+                      <Edit className="h-4 w-4" />
                     </Button>
                     <Button
-                      onClick={handleCancel}
-                      variant="outline"
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700 transition-all duration-300"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => requireAuth(() => handleDeleteActivity(activity.id))}
+                      className="text-gray-300 hover:text-white hover:bg-gray-700 rounded-full"
                     >
-                      <X className="mr-2 h-4 w-4" /> Cancel
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <p className="text-gray-300 leading-relaxed">{activity.description}</p>
                 </CardContent>
-              </Card>
+              </div>
             </motion.div>
-          )}
-
-          {/* Activities List */}
-          <div className="space-y-4">
-            {activities.map((activity, index) => (
-              <motion.div
-                key={activity.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.8, delay: 0.1 * index }}
-                whileHover={{ scale: 1.01 }}
-                className="transition-all duration-300"
-              >
-                <Card className="bg-gray-800/50 backdrop-blur-md border-gray-700 text-white hover:bg-gray-700/50 transition-all duration-300">
-                  <CardHeader className="flex flex-row items-start justify-between pb-2">
-                    <div className="flex items-center space-x-3">
-                      <div className="bg-gradient-to-r from-gray-600 to-gray-700 p-2 rounded-full">
-                        <Users className="h-5 w-5 text-white" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg">{activity.title}</CardTitle>
-                        <p className="text-gray-400 text-sm">
-                          {activity.role} • {activity.period}
-                        </p>
-                        <p className="text-gray-500 text-sm">{activity.organization}</p>
-                      </div>
-                    </div>
-                    <div className="flex space-x-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => requireAuth(() => handleEditActivity(activity.id))}
-                        className="text-gray-400 hover:text-white hover:bg-gray-700 hover:scale-110 transition-all duration-300"
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => requireAuth(() => handleDeleteActivity(activity.id))}
-                        className="text-red-400 hover:bg-red-500/20 hover:scale-110 transition-all duration-300"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <p className="text-gray-300">{activity.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-
-          {activities.length === 0 && !isAdding && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
-              <Users className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-              <p className="text-gray-400 text-lg">No activities added yet</p>
-              <p className="text-gray-500">Click "Add Activity" to showcase your involvement</p>
-            </motion.div>
-          )}
+          ))}
         </div>
+
+        {/* Empty State */}
+        {activities.length === 0 && !isAdding && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
+            <Users className="h-20 w-20 text-gray-600 mx-auto mb-6" />
+            <p className="text-gray-400 text-xl mb-2">No activities added yet</p>
+            <p className="text-gray-500">Click "Add Activity" to showcase your involvement</p>
+          </motion.div>
+        )}
 
         <AuthModal
           isOpen={showAuthModal}
